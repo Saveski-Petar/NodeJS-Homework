@@ -1,0 +1,44 @@
+[
+  {
+    "username": "userName3",
+    "password": "password3",
+    "age": 40,
+    "isActive": true,
+    "date": "Thu Mar 09 2023"
+  },
+  {
+    "username": "userName5",
+    "password": "password5",
+    "age": 42,
+    "isActive": true,
+    "date": "Thu Mar 09 2023"
+  },
+  {
+    "username": "userName6",
+    "password": "password6",
+    "age": 19,
+    "isActive": true,
+    "date": "Thu Mar 09 2023"
+  },
+  {
+    "username": "userName9",
+    "password": "password9",
+    "age": 18,
+    "isActive": true,
+    "date": "Thu Mar 09 2023"
+  },
+  {
+    "username": "Petar",
+    "password": "Petar123",
+    "age": 21,
+    "isActive": true,
+    "date": "Thu Mar 09 2023"
+  },
+  {
+    "username": "AnotherONe",
+    "password": "pass123",
+    "age": 30,
+    "isActive": true,
+    "date": "Thu Mar 09 2023"
+  }
+]
