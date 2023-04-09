@@ -1,0 +1,400 @@
+{
+	"info": {
+		"_postman_id": "36108c57-41bf-4022-b8df-c5bb1939f490",
+		"name": "AdvancedNodeJS-Homeworks",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Zookeepers",
+			"item": [
+				{
+					"name": "Getting all zookeepers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/zookeepers/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"zookeepers",
+								""
+							],
+							"query": [
+								{
+									"key": "isActive",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "Skopje",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "18",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Getting zookeeper by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/zookeepers/6433192680a53dabecf4f67d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"zookeepers",
+								"6433192680a53dabecf4f67d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Zookeeper",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Zookeeper01\",\r\n  \"age\": 50,\r\n  \"location\": \"Skopje\"\r\n  \r\n\r\n  \r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/zookeepers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"zookeepers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit existing zookeeper",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \r\n  \"age\": 90\r\n  \r\n  \r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/zookeepers/6433192680a53dabecf4f67d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"zookeepers",
+								"6433192680a53dabecf4f67d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add Animals To zookeeper",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \r\n \"animals\":[\r\n     \"ANIMAL ID HERE\"\r\n    \r\n     \r\n     ]\r\n\r\n\r\n \r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/zookeepers/6433192680a53dabecf4f67d/animals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"zookeepers",
+								"6433192680a53dabecf4f67d",
+								"animals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting a zookeeper",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/zookeepers/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"zookeepers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting all zookeepers",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"confirmaition\":\"yes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/delete-All-Zookeepers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"delete-All-Zookeepers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "animals",
+			"item": [
+				{
+					"name": "Add Animal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Nemo\",\r\n  \"type\": \"Fish\",\r\n  \"age\": 1,\r\n  \"location\": \"Aquarium\",\r\n  \"gender\": \"M\",\r\n  \"characteristics\": {\r\n    \"colour\": \"orange\",\r\n    \"isDangerous\": false,\r\n    \"weight\": 0.2,\r\n    \"enclosure\": \"tank\"\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/animals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"animals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all Animals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/animals/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"animals",
+								""
+							],
+							"query": [
+								{
+									"key": "location",
+									"value": "San Francisco",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": "M",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "sortBy",
+									"value": "ageAsc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Animal By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/animals/643318e080a53dabecf4f671",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"animals",
+								"643318e080a53dabecf4f671"
+							],
+							"query": [
+								{
+									"key": "location",
+									"value": "Ohrid",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Animal",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \r\n   \r\n    \"characteristics\": {\r\n    \"colour\": \"gray\",\r\n    \"isDangerous\": false,\r\n    \"enclosure\": \"apartment\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/animals/643184281c6649725eff1136",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"animals",
+								"643184281c6649725eff1136"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete animal By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/animals/643312a9b9f50cc5f906ab6f",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"animals",
+								"643312a9b9f50cc5f906ab6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete  ALL animal",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"confirmaition\":\"yes\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/admin/delete-All-Animals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"admin",
+								"delete-All-Animals"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
