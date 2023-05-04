@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsNotEmpty,
@@ -17,8 +17,9 @@ export class ZookeeperCreateDto {
   @MinLength(5, { message: 'Name cannot be less than 5 characters' })
   @ApiProperty({
     type: String,
+    required: true,
     description: 'Name of the Zookeeper',
-    example: 'John',
+    example: 'Johnny',
   })
   name: string;
 
@@ -46,6 +47,7 @@ export class ZookeeperCreateDto {
   location: string;
 
   @IsString()
+  @IsNotEmpty()
   @IsEnum(ZookeeperStatus)
   @ApiProperty({
     type: 'enum',
@@ -69,6 +71,30 @@ export class ZookeeperResponseDto
     example: '64367bfe16e1f50f2ab8e2db',
   })
   id: string;
+
+  @ApiProperty({
+    type: Date,
+    required: true,
+    description: 'Date and time when player has been created',
+    example: '2023-05-02T18:24:24.713Z',
+  })
+  createdAt!: Date;
+
+  @ApiProperty({
+    type: Date,
+    required: true,
+    description: 'Date and time when player has been updated',
+    example: '2023-05-02T18:24:24.713Z',
+  })
+  updatedAt!: Date;
+
+  @ApiPropertyOptional({
+    type: Date,
+    required: false,
+    description: 'Date and time when player has been deleted',
+    example: '2023-05-02T18:24:24.713Z',
+  })
+  deletedAt?: Date;
 }
 
 export class ZookeeperUpdateInfo extends ZookeeperCreateDto {}

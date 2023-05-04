@@ -4,21 +4,23 @@ export interface Animal {
   type: string;
   age: number;
   location: string;
-  gender: AnimalGender;
+  gender: animalGender;
+  zookeeperID?: string;
   characteristics: {
     food?: string[];
     color?: string;
-    isDangerous: AnimalDenger;
+    isDangerous: AnimalDanger;
     weight?: number;
     enclosure: string;
   };
 }
 
-export enum AnimalGender {
+export enum animalGender {
   Male = 'Male',
   Female = 'Female',
 }
-export enum AnimalDenger {
+
+export enum AnimalDanger {
   Dangerous = 'Dangerous',
   Harmless = 'Harmless',
 }

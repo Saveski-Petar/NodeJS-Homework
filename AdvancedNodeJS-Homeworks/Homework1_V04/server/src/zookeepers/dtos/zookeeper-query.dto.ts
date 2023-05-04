@@ -13,6 +13,7 @@ export class ZookeeperQueryDto {
   @ApiPropertyOptional({
     type: String,
     description: 'Name of the Zookeeper',
+    required: false,
     example: 'Johnny',
   })
   name?: string;
@@ -21,6 +22,7 @@ export class ZookeeperQueryDto {
   @IsOptional()
   @ApiPropertyOptional({
     type: String,
+    required: false,
     description: 'Status of the Zookeeper',
     example: ZookeeperStatus.active,
   })
@@ -31,6 +33,7 @@ export class ZookeeperQueryDto {
   @ApiPropertyOptional({
     type: 'enum',
     enum: SortDirection,
+    required: false,
     example: SortDirection.ASC,
     description: 'The sort direction',
   })

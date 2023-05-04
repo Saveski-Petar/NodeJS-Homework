@@ -4,7 +4,6 @@ export interface Zookeeper {
   age: number;
   location: string;
   isActive: ZookeeperStatus;
-  //animals:...
 }
 
 export enum ZookeeperStatus {

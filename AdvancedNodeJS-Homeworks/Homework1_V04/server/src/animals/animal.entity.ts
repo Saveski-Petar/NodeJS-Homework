@@ -1,5 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { AnimalGender, AnimalDenger } from './interface/animal.interface';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { AnimalDanger, animalGender } from './interface/animal';
+import { IsEnum, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { AnimalCharacteristics } from './dtos/animal-characteristics.dto';
+import { Zookeeper } from 'src/zookeepers/zookeepers.entity';
 
 @Entity()
 export class Animal {
@@ -12,7 +24,7 @@ export class Animal {
   @Column()
   type: string;
 
-  @Column()
+  @Column('int')
   age: number;
 
   @Column()
@@ -20,19 +32,29 @@ export class Animal {
 
   @Column({
     type: 'enum',
-    enum: AnimalGender,
+    enum: animalGender,
   })
-  gender: AnimalGender;
+  gender: animalGender;
 
   @Column({
     type: 'json',
+  })
+  @ValidateNested()
+  @Type(() => AnimalCharacteristics)
+  characteristics: AnimalCharacteristics;
+
+  @Column({
     nullable: true,
   })
-  characteristics: {
-    food?: string[];
-    colour?: string;
-    isDangerous: AnimalDenger;
-    weight?: number;
-    enclosure: string;
-  };
+  zookeeperID: string;
+
+  @ManyToOne(() => Zookeeper, (zookeeper) => zookeeper.animals)
+  zookeeper: Zookeeper;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+  @UpdateDateColumn()
+  updatedAt!: Date;
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -18,7 +19,6 @@ import {
   ZookeeperUpdateInfo,
 } from './dtos/zookeeper.dto';
 import { ZookeeperQueryDto } from './dtos/zookeeper-query.dto';
-import { ValidatePromise } from 'class-validator';
 
 @ApiTags('Zookeepers')
 @Controller('zookeepers')
@@ -75,9 +75,7 @@ export class ZookeepersController {
     status: 200,
     description: 'Zookeeper Deleted',
   })
-  deleteZookeeper(
-    @Param('id') zookeeperID: string,
-  ): Promise<ZookeeperResponseDto> {
+  deleteZookeeper(@Param('id') zookeeperID: string): Promise<void> {
     return this.zookeepersService.deleteZookeeper(zookeeperID);
   }
 }

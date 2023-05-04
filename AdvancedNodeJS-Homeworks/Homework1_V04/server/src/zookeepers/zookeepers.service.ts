@@ -14,7 +14,6 @@ import {
   ZookeeperUpdateInfo,
 } from './dtos/zookeeper.dto';
 import { ZookeeperQueryDto } from './dtos/zookeeper-query.dto';
-import { PinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class ZookeepersService {
@@ -35,6 +34,7 @@ export class ZookeepersService {
       if (query.name) {
         const zookeepersByName = await this.zookeeperRepository
           .createQueryBuilder('zookeeper')
+          .leftJoinAndSelect('zookeeper.animals', 'animals')
           .where('zookeeper.name LIKE :name', { name: `%${query.name}%` })
           .getMany();
 
@@ -81,9 +81,7 @@ export class ZookeepersService {
       ...zookeeperUpdateInfo,
     });
   }
-
-  async deleteZookeeper(zookeeperID: string): Promise<ZookeeperResponseDto> {
-    await this.zookeeperRepository.delete(zookeeperID);
-    return;
+  async deleteZookeeper(zookeeperID: string): Promise<void> {
+    await this.zookeeperRepository.softDelete(zookeeperID);
   }
 }

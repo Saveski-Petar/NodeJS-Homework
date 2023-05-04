@@ -6,7 +6,8 @@ export class AnimalQueryDto {
   @IsOptional()
   @ApiPropertyOptional({
     type: String,
-    description: 'Location of the animal zoo',
+    required: false,
+    description: 'Location of the animal',
     example: 'Macedonia',
   })
   location?: string;

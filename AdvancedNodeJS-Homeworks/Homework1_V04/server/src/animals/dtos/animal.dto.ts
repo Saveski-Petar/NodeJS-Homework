@@ -1,79 +1,27 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsNumber,
-  Min,
-  IsNotEmpty,
-  IsString,
-  MinLength,
   IsEnum,
-  IsObject,
-  IsArray,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+  MinLength,
+  ValidateNested,
 } from 'class-validator';
 
-import { ApiProperty, ApiResponse } from '@nestjs/swagger';
-import {
-  AnimalDenger,
-  AnimalGender,
-  Animal,
-} from '../interface/animal.interface';
-
-class AnimalCharacteristics {
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  @ApiProperty({
-    type: [String],
-    description: 'Food for the Animal',
-    example: ['honey', 'apple'],
-  })
-  food?: string[];
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty({
-    type: String,
-    description: 'Color of the Animal',
-    example: 'brown',
-  })
-  color?: string;
-
-  @IsString()
-  @IsEnum(AnimalDenger)
-  @IsNotEmpty({ message: 'Danger status is required' })
-  @ApiProperty({
-    type: 'enum',
-    enum: AnimalDenger,
-    description: 'The danger status of the Animal',
-    example: AnimalDenger.Harmless,
-  })
-  isDangerous: AnimalDenger = AnimalDenger.Harmless;
-
-  @IsNumber()
-  @IsOptional()
-  @Min(0)
-  @ApiProperty({
-    type: Number,
-    description: 'Weight of the Animal in kg',
-    example: 200,
-  })
-  weight?: number;
-
-  @IsString()
-  @IsNotEmpty({ message: 'Enclosure is required' })
-  @ApiProperty({
-    type: String,
-    description: 'Enclosure where the Animal is kept',
-    example: 'zoo',
-  })
-  enclosure: string;
-}
+import { Animal, animalGender } from '../interface/animal';
+import { AnimalCharacteristics } from './animal-characteristics.dto';
+import { Type } from 'class-transformer';
 
 export class AnimalCreateDto {
   @IsString()
-  @IsNotEmpty({ message: 'Name is required' })
+  @IsNotEmpty()
   @MinLength(3, { message: 'Name cannot be less than 3 characters' })
   @ApiProperty({
     type: String,
+    required: true,
     description: 'Name of the Animal',
     example: 'Leo',
   })
@@ -83,66 +31,97 @@ export class AnimalCreateDto {
   @IsNotEmpty()
   @ApiProperty({
     type: String,
-    description: 'The type of the animal',
+    required: true,
+    description: 'Type of the Animal',
     example: 'Bear',
   })
   type: string;
 
   @IsNumber()
-  @IsNotEmpty({ message: 'Age is required' })
+  @IsNotEmpty()
   @Min(0)
   @ApiProperty({
     type: Number,
-    description: 'Age of the animal',
-    example: 4,
+    required: true,
+    description: 'Age of the Animal',
+    example: 8,
   })
   age: number;
 
   @IsString()
-  @IsNotEmpty({ message: 'Location is required' })
+  @IsNotEmpty()
   @ApiProperty({
     type: String,
+    required: true,
     description: 'Location of the Animal',
     example: 'Macedonia',
   })
   location: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Gender   is required' })
-  @IsEnum(AnimalGender)
+  @IsNotEmpty()
+  @IsEnum(animalGender)
   @ApiProperty({
     type: 'enum',
-    enum: AnimalGender,
-    description: 'The Gender of the Animal',
-    example: AnimalGender.Male,
+    enum: animalGender,
+    required: true,
+    description: 'Gender of the Animal',
+    example: animalGender.Male,
   })
-  gender: AnimalGender;
+  gender: animalGender;
 
-  @IsObject()
-  @IsNotEmpty({ message: 'Some of the characteristics are required' })
+  @IsOptional()
+  @IsString()
+  @ApiPropertyOptional({
+    type: String,
+    required: false,
+    description: 'Zookeeper id ',
+    example: 'iuybegu7ithy2t1e',
+  })
+  zookeeperID?: string;
+
+  @ValidateNested()
+  @Type(() => AnimalCharacteristics)
   @ApiProperty({
-    type: Object,
-    description: 'Characteristics of the Animal',
-    example: {
-      food: ['honey', 'apple', 'watermelon', 'cucumber'],
-      color: 'brown',
-      isDangerous: AnimalDenger.Harmless,
-      weight: 200,
-      enclosure: 'zoo',
-    },
+    description: 'The characteristics of the animal',
+    type: () => AnimalCharacteristics,
   })
   characteristics: AnimalCharacteristics;
 }
 
 export class AnimalResponseDto extends AnimalCreateDto implements Animal {
-  @IsString()
+  @IsUUID()
   @IsNotEmpty()
   @ApiProperty({
     type: String,
     description: 'ID of the Animal',
-    example: '64367bfe16e1f50f2ab8e2db',
+    example: 'e08ea6f5-4a75-44ed-9a8d-0587d154710d',
   })
   id: string;
+
+  @ApiProperty({
+    type: Date,
+    required: true,
+    description: 'Date and time when player has been created',
+    example: '2023-05-02T18:24:24.713Z',
+  })
+  createdAt!: Date;
+
+  @ApiProperty({
+    type: Date,
+    required: true,
+    description: 'Date and time when player has been updated',
+    example: '2023-05-02T18:24:24.713Z',
+  })
+  updatedAt!: Date;
+
+  @ApiPropertyOptional({
+    type: Date,
+    required: false,
+    description: 'Date and time when player has been deleted',
+    example: '2023-05-02T18:24:24.713Z',
+  })
+  deletedAt?: Date;
 }
 
 export class AnimalUpdateDto extends AnimalCreateDto {}
