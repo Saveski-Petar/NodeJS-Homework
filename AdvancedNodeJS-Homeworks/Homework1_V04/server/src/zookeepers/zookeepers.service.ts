@@ -46,12 +46,19 @@ export class ZookeepersService {
         return zookeepersByName;
       }
       if (query.isActive) {
-        return await this.zookeeperRepository
+        const zookeepersByActiveStatus = await this.zookeeperRepository
           .createQueryBuilder('zookeeper')
           .where('zookeeper.isActive = :isActive', {
             isActive: query.isActive,
           })
           .getMany();
+
+        if (zookeepersByActiveStatus.length === 0)
+          throw new NotFoundException(
+            `There are no found zookeepers with ${query.isActive} status `,
+          );
+
+        return zookeepersByActiveStatus;
       }
     }
 

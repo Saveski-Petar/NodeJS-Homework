@@ -28,14 +28,5 @@ export class ZookeeperQueryDto {
   })
   isActive?: string;
 
-  @IsEnum(SortDirection)
-  @IsOptional()
-  @ApiPropertyOptional({
-    type: 'enum',
-    enum: SortDirection,
-    required: false,
-    example: SortDirection.ASC,
-    description: 'The sort direction',
-  })
-  sortDirection?: SortDirection;
+ 
 }

@@ -77,7 +77,7 @@ export class AnimalsService {
   ): Promise<AnimalResponseDto> {
     const animal = await this.getAnimalByID(animalID);
 
-    const alreadyHasAZookeeper = animal?.zookeeperID.length !== null;
+    const alreadyHasAZookeeper = animal?.zookeeperID !== null;
 
     if (alreadyHasAZookeeper) {
       throw new BadRequestException(
