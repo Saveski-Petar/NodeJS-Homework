@@ -78,7 +78,7 @@ export class AnimalCreateDto {
     description: 'Zookeeper id ',
     example: 'iuybegu7ithy2t1e',
   })
-  zookeeperID?: string;
+  zookeeperId?: string;
 
   @ValidateNested()
   @Type(() => AnimalCharacteristics)

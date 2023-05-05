@@ -73,11 +73,11 @@ export class AnimalsService {
 
   async addZookeeperToAnimal(
     animalID: string,
-    zookeeperID: string,
+    zookeeperId: string,
   ): Promise<AnimalResponseDto> {
     const animal = await this.getAnimalByID(animalID);
 
-    const alreadyHasAZookeeper = animal?.zookeeperID !== null;
+    const alreadyHasAZookeeper = animal?.zookeeperId?.length;
 
     if (alreadyHasAZookeeper) {
       throw new BadRequestException(
@@ -86,7 +86,7 @@ export class AnimalsService {
     }
     await this.animalRepository.save({
       id: animalID,
-      zookeeperID,
+      zookeeperId,
     });
     return this.getAnimalByID(animalID);
   }

@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { AnimalDanger, animalGender } from './interface/animal';
-import { IsEnum, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { AnimalCharacteristics } from './dtos/animal-characteristics.dto';
 import { Zookeeper } from 'src/zookeepers/zookeepers.entity';
@@ -39,14 +38,13 @@ export class Animal {
   @Column({
     type: 'json',
   })
-  @ValidateNested()
   @Type(() => AnimalCharacteristics)
   characteristics: AnimalCharacteristics;
 
   @Column({
     nullable: true,
   })
-  zookeeperID: string;
+  zookeeperId: string;
 
   @ManyToOne(() => Zookeeper, (zookeeper) => zookeeper.animals)
   zookeeper: Zookeeper;
