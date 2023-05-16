@@ -92,7 +92,11 @@ export class AnimalsService {
     return this.getAnimalByID(animalID);
   }
 
-  async deleteAnimal(animalID: string): Promise<void> {
+  async softDeleteAnimal(animalID: string): Promise<void> {
     await this.animalRepository.softDelete(animalID);
+  }
+
+  async hardDeleteAnimal(animalID: string): Promise<void> {
+    await this.animalRepository.delete(animalID);
   }
 }
