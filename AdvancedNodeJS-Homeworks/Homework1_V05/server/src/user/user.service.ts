@@ -29,8 +29,9 @@ export class UserService {
     if (!userExists && zookeeperExists) {
       throw new ConflictException("Email is already registered ");
     }
+    const { confirmPassword, ...rest } = user;
 
-    return await this.userRepository.save(user);
+    return await this.userRepository.save(rest);
   }
 
   async getUsers(): Promise<UserResponseDto[]> {

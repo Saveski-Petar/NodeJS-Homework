@@ -4,12 +4,14 @@ import { UserService } from "src/user/user.service";
 import * as bcrypt from "bcrypt";
 import { LoginDto, LoginResponseDto } from "./dto/login.dto";
 import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async signUp(userRegisterData: UserRegisterDto): Promise<UserResponseDto> {
@@ -27,16 +29,12 @@ export class AuthService {
       userLoginData.password,
     );
 
-    const accessToken = this.jwtService.sign({
-      role: user.role,
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-    });
+    const accessToken = this.generateAccessToken(user);
+    const refreshToken = this.generateRefreshToken(user);
 
     return {
-      user,
       accessToken,
+      refreshToken,
     };
   }
 
@@ -51,5 +49,44 @@ export class AuthService {
       throw new UnauthorizedException(`Invalid credentials`);
     }
     return user;
+  }
+
+  generateAccessToken(user: UserResponseDto): string {
+    const payload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+      fullName: user.fullName,
+    };
+    return this.jwtService.sign(payload);
+  }
+
+  generateRefreshToken(user: UserResponseDto): string {
+    const payload = { email: user.email, sub: user.id, role: user.role };
+    return this.jwtService.sign(payload, {
+      expiresIn: "1h",
+      issuer: "refresh",
+      secret: this.configService.get<string>("RF_TOKEN"), // Use the refresh token secret
+    });
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise<string> {
+    // Verify the validity of the refresh token
+
+    const decodedToken = this.jwtService.verify(refreshToken, {
+      issuer: "refresh",
+      secret: this.configService.get<string>("RF_TOKEN"),
+    });
+
+    // Extract the necessary information from the decoded refresh token
+    const { email, sub, role } = decodedToken;
+
+    // Generate a new access token using the extracted information
+    const newAccessToken = this.jwtService.sign(
+      { email, sub, role },
+      { expiresIn: "15s" }, // Set the desired expiration time for the new access token
+    );
+
+    return newAccessToken;
   }
 }

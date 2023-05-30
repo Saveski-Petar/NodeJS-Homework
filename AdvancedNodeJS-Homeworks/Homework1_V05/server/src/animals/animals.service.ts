@@ -43,6 +43,18 @@ export class AnimalsService {
       return animalsByLocation;
     }
 
+    if (query && query.type) {
+      const animalsByType = await this.animalRepository.find({
+        where: { type: query.type },
+      });
+      if (animalsByType.length === 0)
+        throw new NotFoundException(
+          `No animals found in our database with this type ${query.type}`,
+        );
+
+      return animalsByType;
+    }
+
     return animals;
   }
 

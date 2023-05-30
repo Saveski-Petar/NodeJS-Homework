@@ -1,5 +1,5 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsOptional, IsString } from "class-validator";
 
 export class AnimalQueryDto {
   @IsString()
@@ -7,8 +7,18 @@ export class AnimalQueryDto {
   @ApiPropertyOptional({
     type: String,
     required: false,
-    description: 'Location of the animal',
-    example: 'Macedonia',
+    description: "Location of the animal",
+    example: "Macedonia",
   })
   location?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiPropertyOptional({
+    type: String,
+    required: false,
+    description: "Type of the animal",
+    example: "Bear",
+  })
+  type?: string;
 }

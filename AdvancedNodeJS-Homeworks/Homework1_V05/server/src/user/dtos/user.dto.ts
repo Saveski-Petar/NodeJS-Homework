@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import {
   IsEmail,
   IsEnum,
@@ -87,10 +87,10 @@ export class UserRegisterDto {
     description: "Confirm password of the user account",
     example: "Password123",
   })
-  confirmPassword?: string; //Ask about this
+  confirmPassword: string;
 }
 
-export class UserResponseDto extends UserRegisterDto {
+export class UserResponseDto {
   @IsNotEmpty()
   @IsString()
   @IsUUID()
@@ -101,6 +101,62 @@ export class UserResponseDto extends UserRegisterDto {
     example: "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
   })
   id: string;
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: "Full Name of the User",
+    example: "John Doe",
+  })
+  fullName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  @ApiProperty({
+    type: String,
+    required: true,
+    uniqueItems: true,
+    description: "Email of the user",
+    example: "JohnDoe@mail.com",
+  })
+  email: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(18)
+  @Max(49)
+  @ApiProperty({
+    type: Number,
+    required: true,
+    description: "Age of the user",
+    example: 28,
+  })
+  age: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: "Location of the user",
+    example: "Macedonia",
+  })
+  location: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Length(8, 24)
+  @Matches(PASSWORD_RULE, { message: PASSWORD_RULE_MESSAGE })
+  @ApiProperty({
+    type: String,
+    required: true,
+    description: "password of the user account",
+    example: "Password123",
+  })
+  password: string;
 
   @IsEnum(RolesEnum)
   @ApiProperty({

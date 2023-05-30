@@ -48,7 +48,7 @@ export class AnimalsController {
     return this.animalService.addAnimal(animalData);
   }
 
-  @Roles(RolesEnum.owner, RolesEnum.zookeeper)
+  @Roles(RolesEnum.owner, RolesEnum.zookeeper, RolesEnum.user)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   @UsePipes(ValidationPipe)
@@ -73,6 +73,8 @@ export class AnimalsController {
     description: "Animal Not Found",
   })
   getAnimalByID(@Param("id") animalID: string): Promise<AnimalResponseDto> {
+    console.log("Animal ID ID iD", animalID);
+
     return this.animalService.getAnimalByID(animalID);
   }
 
