@@ -19,7 +19,6 @@ const SearchBar = ({ searchEndpoint, dynamicParam, query, onSearch }) => {
 
       const response = await axiosInstance.get(endpoint)
       onSearch(response.data)
-      console.log(response)
     } catch (error) {
       console.log(error)
     }

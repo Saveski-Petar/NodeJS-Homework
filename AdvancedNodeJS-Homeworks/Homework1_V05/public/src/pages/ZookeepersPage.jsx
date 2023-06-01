@@ -1,5 +1,5 @@
 import React from 'react'
-import Zookeepers from '../components/zookeeper/Zookeepers'
+
 import NavBar from '../components/navBar/NavBar'
 import SearchBar from '../components/searchBar/SearchBar'
 
@@ -8,7 +8,6 @@ const ZookeepersPage = () => {
     <>
       <NavBar />
       <SearchBar searchEndpoint={'/api'} />
-      <Zookeepers />
     </>
   )
 }

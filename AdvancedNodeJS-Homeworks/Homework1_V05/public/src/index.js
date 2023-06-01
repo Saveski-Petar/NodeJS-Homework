@@ -6,8 +6,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import 'swiper/css/pagination'
-
 import 'swiper/css/navigation'
+import './index.css'
 import App from './App'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))

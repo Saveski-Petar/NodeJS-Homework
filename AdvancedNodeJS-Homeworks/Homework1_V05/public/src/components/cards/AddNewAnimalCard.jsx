@@ -1,61 +1,41 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { Col, Row } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
-import { Row, Col } from 'react-bootstrap'
 import axiosInstance from '../../api/axios'
 
-const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
+const AddNewAnimalCard = ({ handleClose, show }) => {
   const [name, setName] = useState('')
   const [type, setType] = useState('')
   const [age, setAge] = useState('')
   const [location, setLocation] = useState('')
   const [gender, setGender] = useState('')
-  const [food, setFood] = useState('')
+  const [food, setFood] = useState([])
   const [color, setColor] = useState('')
   const [isDangerous, setIsDangerous] = useState(false)
   const [weight, setWeight] = useState('')
   const [enclosure, setEnclosure] = useState('')
 
-  useEffect(() => {
-    if (selectedAnimal) {
-      setName(selectedAnimal.name)
-      setType(selectedAnimal.type)
-      setAge(selectedAnimal.age)
-      setLocation(selectedAnimal.location)
-      setGender(selectedAnimal.gender)
-      const { food, color, isDangerous, weight, enclosure } =
-        selectedAnimal.characteristics
-      setFood(food.join(', '))
-      setColor(color)
-      setIsDangerous(isDangerous)
-      setWeight(weight)
-      setEnclosure(enclosure)
-    }
-  }, [selectedAnimal])
+  const animalData = {
+    name,
+    type,
+    age: parseInt(age),
+    location,
+    gender,
+    characteristics: {
+      food: [],
+      color,
+      isDangerous: isDangerous ? 'Dangerous' : 'Harmless',
+      weight: parseInt(weight),
+      enclosure,
+    },
+  }
 
-  const handleSaveChanges = async (fetchAnimals) => {
+  const handleAddAnimal = async () => {
     try {
-      const updatedAnimal = {
-        name,
-        type,
-        age,
-        location,
-        gender,
-        characteristics: {
-          food: food.split(',').map((f) => f.trim()),
-          color,
-          isDangerous,
-          weight,
-          enclosure,
-        },
-      }
-      await axiosInstance.put(
-        `/api/animals/${selectedAnimal.id}`,
-        updatedAnimal
-      )
-      fetchAnimals()
-
+      await axiosInstance.post('/api/animals', animalData)
+      console.log('animal Added')
       handleClose()
     } catch (error) {
       console.log(error)
@@ -66,7 +46,7 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
     <>
       <Modal fullscreen="sm-down" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit Animal</Modal.Title>
+          <Modal.Title>Add Animal</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -134,8 +114,8 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
                     <option disabled value="">
                       Select gender
                     </option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
                   </Form.Select>
                 </Form.Group>
 
@@ -206,11 +186,8 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => handleSaveChanges(fetchAnimals)}
-          >
-            Save Changes
+          <Button variant="primary" onClick={handleAddAnimal}>
+            Add Animal
           </Button>
         </Modal.Footer>
       </Modal>
@@ -218,4 +195,4 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
   )
 }
 
-export default EditAnimal
+export default AddNewAnimalCard

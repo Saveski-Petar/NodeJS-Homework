@@ -6,8 +6,9 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 
-const NavBar = () => {
+const NavBar = ({ onAdd, onAssign }) => {
   const navigate = useNavigate()
+
   const { accessToken } = useContext(AuthContext)
 
   const handleLogOut = () => {
@@ -16,6 +17,7 @@ const NavBar = () => {
 
     navigate('/login')
   }
+
   return (
     <>
       <Navbar bg="dark" expand="lg" variant="dark">
@@ -65,6 +67,21 @@ const NavBar = () => {
                   <span style={{ color: 'aqua' }}>{accessToken?.fullName}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
+                  {accessToken?.role === 'owner' && (
+                    <>
+                      <Dropdown.Item
+                        onClick={() => {
+                          onAdd()
+                        }}
+                      >
+                        Add New Animal
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => onAssign()}>
+                        Assign Zookeeper
+                      </Dropdown.Item>
+                      <hr />
+                    </>
+                  )}
                   <Dropdown.Item onClick={handleLogOut}>Log Out</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
