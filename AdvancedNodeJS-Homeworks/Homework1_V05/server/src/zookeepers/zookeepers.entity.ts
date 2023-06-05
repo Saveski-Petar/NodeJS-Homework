@@ -27,6 +27,9 @@ export class Zookeeper {
   email: string;
 
   @Column()
+  password: string;
+
+  @Column()
   location: string;
 
   @Column({

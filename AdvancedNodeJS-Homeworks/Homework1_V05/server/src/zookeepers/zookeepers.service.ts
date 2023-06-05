@@ -20,7 +20,9 @@ export class ZookeepersService {
   async getZookeeper(
     query?: ZookeeperQueryDto,
   ): Promise<ZookeeperResponseDto[]> {
-    const zookeeper = await this.zookeeperRepository.find({});
+    const zookeeper = await this.zookeeperRepository.find({
+      relations: ["animals"],
+    });
 
     if (zookeeper.length === 0)
       throw new NotFoundException(`There  are 0  zookeepers in Database`);
@@ -30,7 +32,7 @@ export class ZookeepersService {
         const zookeepersByName = await this.zookeeperRepository
           .createQueryBuilder("zookeeper")
           .leftJoinAndSelect("zookeeper.animals", "animals")
-          .where("zookeeper.fullName LIKE :fullName", {
+          .where("zookeeper.fullName ILIKE :fullName", {
             fullName: `%${query.fullName}%`,
           })
           .getMany();

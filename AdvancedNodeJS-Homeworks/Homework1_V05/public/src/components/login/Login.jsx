@@ -9,6 +9,7 @@ const Login = ({ onToggleForm }) => {
   const [showPassword, setShowPassowrd] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
   const { login } = useContext(AuthContext)
   const navigate = useNavigate()
 
@@ -29,8 +30,10 @@ const Login = ({ onToggleForm }) => {
       login(accessToken)
     } catch (error) {
       console.log(error)
-      setPassword('')
-      setEmail('')
+      setError({
+        statusCode: error.response.data.statusCode,
+        message: error.response.data.message,
+      })
     }
   }
 
@@ -39,11 +42,17 @@ const Login = ({ onToggleForm }) => {
   }
 
   return (
-    <Container fluid className="vh-100">
+    <Container fluid className="vh-100 ">
       <Row className="justify-content-center align-items-center h-100 m-0">
         <Col sm={8} md={5} lg={4}>
-          <div className="bg-white shadow p-4 rounded">
+          <div className="bg-black card-shadow  p-4 rounded ">
             <h1 className="text-center mb-4">Sign In</h1>
+            {error && (
+              <>
+                <h2>{error.statusCode}</h2>
+                <p>{error.message}</p>
+              </>
+            )}
             <Form onSubmit={handleLogin}>
               <Form.Group className="mb-3">
                 <Form.Label>Email</Form.Label>

@@ -3,14 +3,16 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { UserModule } from "src/user/user.module";
-import { JwtModule, JwtModuleOptions } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategy/jwt.strategy";
 import { RefreshTokenStrategy } from "./strategy/refreshToken.strategy";
+import { ZookeepersModule } from "src/zookeepers/zookeepers.module";
 
 @Module({
   imports: [
     UserModule,
+    ZookeepersModule,
     PassportModule,
     ConfigModule.forRoot(),
     JwtModule.registerAsync({

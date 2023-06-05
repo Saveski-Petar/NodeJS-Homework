@@ -3,11 +3,12 @@ import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Dropdown from 'react-bootstrap/Dropdown'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext'
 
-const NavBar = ({ onAdd, onAssign }) => {
+const NavBar = ({ onAdd }) => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { accessToken } = useContext(AuthContext)
 
@@ -67,21 +68,20 @@ const NavBar = ({ onAdd, onAssign }) => {
                   <span style={{ color: 'aqua' }}>{accessToken?.fullName}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  {accessToken?.role === 'owner' && (
-                    <>
-                      <Dropdown.Item
-                        onClick={() => {
-                          onAdd()
-                        }}
-                      >
-                        Add New Animal
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={() => onAssign()}>
-                        Assign Zookeeper
-                      </Dropdown.Item>
-                      <hr />
-                    </>
-                  )}
+                  {accessToken?.role === 'owner' &&
+                    location.pathname === '/animals' && (
+                      <>
+                        <Dropdown.Item
+                          onClick={() => {
+                            onAdd()
+                          }}
+                        >
+                          Add New Animal
+                        </Dropdown.Item>
+
+                        <hr />
+                      </>
+                    )}
                   <Dropdown.Item onClick={handleLogOut}>Log Out</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

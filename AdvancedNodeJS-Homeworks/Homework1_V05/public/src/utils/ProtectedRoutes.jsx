@@ -6,18 +6,21 @@ const ProtectedRoutes = ({ allowedRoles }) => {
   const location = useLocation()
   const { accessToken } = useContext(AuthContext)
 
-  const matchingRole = allowedRoles.includes(accessToken?.role)
+  const matchingRole = allowedRoles.includes(accessToken?.role ?? null)
 
   useEffect(() => {
-    if (!matchingRole) {
+    if (accessToken && !matchingRole) {
       const timeout = setTimeout(() => {
         window.history.back()
-      }, 1000)
+      }, 2500)
 
       return () => clearTimeout(timeout)
     }
-  }, [matchingRole])
+  }, [accessToken, matchingRole])
 
+  if (!accessToken) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
   if (!matchingRole) {
     return (
       <div className="vh-100 d-flex justify-content-center align-content-center">

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import axiosInstance from '../../api/axios'
 
-const AddNewAnimalCard = ({ handleClose, show }) => {
+const AddNewAnimalCard = ({ handleClose, show, updateAnimals }) => {
   const [name, setName] = useState('')
   const [type, setType] = useState('')
   const [age, setAge] = useState('')
@@ -16,6 +16,7 @@ const AddNewAnimalCard = ({ handleClose, show }) => {
   const [isDangerous, setIsDangerous] = useState(false)
   const [weight, setWeight] = useState('')
   const [enclosure, setEnclosure] = useState('')
+  const [error, setError] = useState(null)
 
   const animalData = {
     name,
@@ -32,13 +33,37 @@ const AddNewAnimalCard = ({ handleClose, show }) => {
     },
   }
 
+  useEffect(() => {
+    if (!show) {
+      resetForm()
+    }
+  }, [show])
+  const resetForm = () => {
+    setName('')
+    setType('')
+    setAge('')
+    setLocation('')
+    setGender('')
+    setFood('')
+    setColor('')
+    setIsDangerous(false)
+    setWeight('')
+    setEnclosure('')
+    setError(null)
+  }
+
   const handleAddAnimal = async () => {
     try {
       await axiosInstance.post('/api/animals', animalData)
       console.log('animal Added')
+      updateAnimals()
       handleClose()
     } catch (error) {
       console.log(error)
+      setError({
+        statusCode: error.response.data.statusCode,
+        message: error.response.data.message,
+      })
     }
   }
 
@@ -48,6 +73,17 @@ const AddNewAnimalCard = ({ handleClose, show }) => {
         <Modal.Header closeButton>
           <Modal.Title>Add Animal</Modal.Title>
         </Modal.Header>
+        {error && (
+          <>
+            {' '}
+            <h3>{error.statusCode}</h3>
+            <ul>
+              {error.message.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </>
+        )}
         <Modal.Body>
           <Form>
             <Row>

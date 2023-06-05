@@ -16,9 +16,11 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
   const [isDangerous, setIsDangerous] = useState(false)
   const [weight, setWeight] = useState('')
   const [enclosure, setEnclosure] = useState('')
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     if (selectedAnimal) {
+      setError(null)
       setName(selectedAnimal.name)
       setType(selectedAnimal.type)
       setAge(selectedAnimal.age)
@@ -34,12 +36,34 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
     }
   }, [selectedAnimal])
 
+  useEffect(() => {
+    if (!show) {
+      resetForm(selectedAnimal)
+    }
+  }, [show])
+
+  const resetForm = (selectedAnimal) => {
+    setError(null)
+    setName(selectedAnimal?.name)
+    setType(selectedAnimal?.type)
+    setAge(selectedAnimal?.age)
+    setLocation(selectedAnimal?.location)
+    setGender(selectedAnimal?.gender)
+    const { food, color, isDangerous, weight, enclosure } =
+      selectedAnimal?.characteristics || {}
+    setFood(food?.join(', '))
+    setColor(color)
+    setIsDangerous(isDangerous || false)
+    setWeight(weight)
+    setEnclosure(enclosure)
+  }
+
   const handleSaveChanges = async (fetchAnimals) => {
     try {
       const updatedAnimal = {
         name,
         type,
-        age,
+        age: parseInt(age),
         location,
         gender,
         characteristics: {
@@ -58,7 +82,10 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
 
       handleClose()
     } catch (error) {
-      console.log(error)
+      setError({
+        statusCode: error.response.data.statusCode,
+        message: error.response.data.message,
+      })
     }
   }
 
@@ -68,6 +95,17 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
         <Modal.Header closeButton>
           <Modal.Title>Edit Animal</Modal.Title>
         </Modal.Header>
+        {error && (
+          <>
+            {' '}
+            <h3>{error.statusCode}</h3>
+            <ul>
+              {error.message.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </>
+        )}
         <Modal.Body>
           <Form>
             <Row>

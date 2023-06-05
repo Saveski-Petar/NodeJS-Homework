@@ -5,6 +5,8 @@ import * as bcrypt from "bcrypt";
 import { LoginDto, LoginResponseDto } from "./dto/login.dto";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
+import { ZookeepersService } from "src/zookeepers/zookeepers.service";
+import { NotFoundError } from "rxjs";
 
 @Injectable()
 export class AuthService {
@@ -12,6 +14,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly zookeeperService: ZookeepersService,
   ) {}
 
   async signUp(userRegisterData: UserRegisterDto): Promise<UserResponseDto> {
@@ -44,11 +47,30 @@ export class AuthService {
   ): Promise<UserResponseDto> {
     const user = await this.userService.findUserByEmail(email);
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException(`Invalid credentials`);
+    if (user) {
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new UnauthorizedException(`Invalid credentials`);
+      }
+      return user;
     }
-    return user;
+
+    if (!user) {
+      const zookeeper = await this.zookeeperService.findZookeeperByEmail(email);
+
+      if (zookeeper) {
+        const isPasswordValid = await bcrypt.compare(
+          password,
+          zookeeper.password,
+        );
+        if (!isPasswordValid) {
+          throw new UnauthorizedException(`Invalid credentials`);
+        }
+        return zookeeper;
+      }
+    }
+
+    throw new UnauthorizedException(`Invalid credentials`);
   }
 
   generateAccessToken(user: UserResponseDto): string {

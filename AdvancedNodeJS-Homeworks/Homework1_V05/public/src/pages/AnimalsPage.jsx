@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-
 import NavBar from '../components/navBar/NavBar'
-import Cards from '../components/cards/Card'
 import axiosInstance from '../api/axios'
 import SearchBar from '../components/searchBar/SearchBar'
 import EditAnimal from '../components/cards/EditAnimal'
 import AddNewAnimalCard from '../components/cards/AddNewAnimalCard'
 import AssignZookeeper from '../components/cards/AssignZookeeper'
+import AnimalList from '../components/lists/AnimalList'
+import SuccessMsg from '../components/SuccessMsg'
+import { Container } from 'react-bootstrap'
 
 const AnimalsPage = () => {
   const [data, setData] = useState([])
@@ -15,6 +16,8 @@ const AnimalsPage = () => {
   const [showEditModal, setShowEditModal] = useState(false)
   const [showAddNewAnimal, setShowAddNewAnimal] = useState(false)
   const [openAssignZookeeper, setOpenAssignZookeeper] = useState(false)
+  const [addNewAnimalMsg, setAddNewAnimalMsg] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchAnimals()
@@ -26,11 +29,20 @@ const AnimalsPage = () => {
       console.log('FetchUsed')
       setData(response.data)
     } catch (error) {
-      console.log(error)
+      if (error.response) {
+        setError({
+          statusCode: error.response.data?.statusCode,
+          message: error.response.data?.message,
+        })
+      } else {
+        setError({
+          statusCode: null,
+          message: 'An error occurred. Please try again.',
+        })
+      }
     }
   }
   useEffect(() => {
-    // Update searched data when the data changes
     setSearchData(null)
   }, [data])
 
@@ -49,11 +61,13 @@ const AnimalsPage = () => {
 
   const handleCloseNewAnimalModal = () => {
     setShowAddNewAnimal(false)
+    setAddNewAnimalMsg(true)
   }
   const handleOpenNewAnimalModal = () => {
     setShowAddNewAnimal(true)
   }
-  const handleOpenAssignZookeeper = () => {
+  const handleOpenAssignZookeeper = (animal) => {
+    setSelectedAnimal(animal)
     setOpenAssignZookeeper(true)
   }
   const handleCloseAssignZookeeper = () => {
@@ -73,22 +87,29 @@ const AnimalsPage = () => {
 
   return (
     <>
-      <NavBar
-        onAdd={handleOpenNewAnimalModal}
-        onAssign={handleOpenAssignZookeeper}
-      />
+      {addNewAnimalMsg && (
+        <SuccessMsg
+          message="New Animal Added Successfully"
+          onClose={() => setAddNewAnimalMsg(false)}
+        />
+      )}
+      <NavBar onAdd={handleOpenNewAnimalModal} />
       <SearchBar
         searchEndpoint="/api/animals/"
+        placeHolder="Search By Type"
         query="type"
         onSearch={searchData}
       />
       <AddNewAnimalCard
         show={showAddNewAnimal}
         handleClose={handleCloseNewAnimalModal}
+        updateAnimals={fetchAnimals}
       />
       <AssignZookeeper
         show={openAssignZookeeper}
+        selectedAnimal={selectedAnimal}
         handleClose={handleCloseAssignZookeeper}
+        updateAnimals={fetchAnimals}
       />
 
       <EditAnimal
@@ -98,12 +119,21 @@ const AnimalsPage = () => {
         selectedAnimal={selectedAnimal}
         fetchAnimals={fetchAnimals}
       />
-      <Cards
-        data={searchedData ? searchedData : data}
-        selectedAnimal={selectedAnimal}
-        onEdit={handleEditAnimal}
-        handleDelete={handleDelete}
-      />
+
+      {error ? (
+        <Container className="text-center">
+          <h1>{error.statusCode}</h1>
+          <p>{error.message}</p>
+        </Container>
+      ) : (
+        <AnimalList
+          data={searchedData ? searchedData : data}
+          selectedAnimal={selectedAnimal}
+          onEdit={handleEditAnimal}
+          handleDelete={handleDelete}
+          onAssign={handleOpenAssignZookeeper}
+        />
+      )}
     </>
   )
 }

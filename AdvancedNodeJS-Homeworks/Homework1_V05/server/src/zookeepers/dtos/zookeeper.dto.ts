@@ -84,6 +84,8 @@ export class ZookeeperResponseDto
   })
   isActive: ZookeeperStatus = ZookeeperStatus.inactive;
 
+  password: string;
+
   @IsString()
   @IsNotEmpty()
   @IsEnum(RolesEnum)
@@ -121,4 +123,28 @@ export class ZookeeperResponseDto
   deletedAt?: Date;
 }
 
-export class ZookeeperUpdateInfo extends ZookeeperCreateDto {}
+export class ZookeeperUpdateInfo extends ZookeeperCreateDto {
+  @IsString()
+  @IsNotEmpty()
+  @IsEnum(ZookeeperStatus)
+  @ApiProperty({
+    type: "enum",
+    enum: ZookeeperStatus,
+    description: "The status of the Zookeeper",
+    example: ZookeeperStatus.active,
+    default: ZookeeperStatus.inactive,
+  })
+  isActive: ZookeeperStatus;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsEnum(RolesEnum)
+  @ApiProperty({
+    type: "enum",
+    enum: RolesEnum,
+    description: "The Role of the user",
+    example: RolesEnum.zookeeper,
+    default: RolesEnum.zookeeper,
+  })
+  role: RolesEnum;
+}

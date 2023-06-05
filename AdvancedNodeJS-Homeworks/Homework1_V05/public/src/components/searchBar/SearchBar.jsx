@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import axiosInstance from '../../api/axios'
 
-const SearchBar = ({ searchEndpoint, dynamicParam, query, onSearch }) => {
-  const [data, setData] = useState()
+const SearchBar = ({
+  searchEndpoint,
+  dynamicParam,
+  query,
+  onSearch,
+  placeHolder,
+}) => {
+  const [data, setData] = useState([])
+  const [error, setError] = useState(null)
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -20,7 +27,10 @@ const SearchBar = ({ searchEndpoint, dynamicParam, query, onSearch }) => {
       const response = await axiosInstance.get(endpoint)
       onSearch(response.data)
     } catch (error) {
-      console.log(error)
+      setError({
+        statusCode: error.response.data.statusCode,
+        message: error.response.data.message,
+      })
     }
   }
 
@@ -31,7 +41,7 @@ const SearchBar = ({ searchEndpoint, dynamicParam, query, onSearch }) => {
           <Form className="d-flex" onSubmit={handleSearch}>
             <Form.Control
               type="search"
-              placeholder="Search"
+              placeholder={placeHolder}
               className="me-2 rounded-pill"
               aria-label="Search"
               value={data}
@@ -45,6 +55,11 @@ const SearchBar = ({ searchEndpoint, dynamicParam, query, onSearch }) => {
               Search
             </Button>
           </Form>
+          {error && (
+            <>
+              <h3>{error.statusCode}</h3> <p>{error.message}</p>
+            </>
+          )}
         </Col>
       </Row>
     </Container>

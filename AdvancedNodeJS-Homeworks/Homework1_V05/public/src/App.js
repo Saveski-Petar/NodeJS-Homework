@@ -29,9 +29,15 @@ function App() {
           <Route element={<ProtectedRoutes allowedRoles={[Roles.owner]} />}>
             <Route path="/users" element={<UsersPage />} />
             <Route path="/Zookeepers" element={<ZookeepersPage />} />
-            <Route path="/Animals" element={<AnimalsPage />} />
           </Route>
 
+          <Route
+            element={
+              <ProtectedRoutes allowedRoles={[Roles.owner, Roles.zookeeper]} />
+            }
+          >
+            <Route path="/Animals" element={<AnimalsPage />} />
+          </Route>
           <Route path="/login" element={<LoginRegisterPage />} />
           <Route path="*" element={<div>Page not Found!</div>} />
         </Routes>

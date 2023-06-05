@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, { useState } from 'react'
+
 import { Col, Row } from 'react-bootstrap'
 import { CardText } from 'react-bootstrap-icons'
 import Card from 'react-bootstrap/Card'
@@ -14,14 +14,8 @@ import {
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
 import { BsFillCaretDownFill, BsFillCaretUpFill } from 'react-icons/bs'
-import { AuthContext } from '../../context/AuthContext'
-import Button from 'react-bootstrap/Button'
 
-const Cards = ({ data, handleDelete, onEdit }) => {
-  const location = useLocation()
-
-  const { accessToken } = useContext(AuthContext)
-
+const Cards = ({ data }) => {
   const [icon, setIcon] = useState(false)
 
   const handleIcon = () => {
@@ -29,21 +23,13 @@ const Cards = ({ data, handleDelete, onEdit }) => {
   }
 
   const renderPopover = (object) => (
-    <Popover id={`popover-${object.id}`}>
+    <Popover className="bg-black " id={`popover-${object.id}`}>
       <Popover.Body>
-        <ul className="list-unstyled">
-          <li>
-            <p>Color: {object?.characteristics?.color}</p>
-          </li>
-          <li>
-            <p>Weight: {object?.characteristics?.weight}kg</p>
-          </li>
-          <li>
-            <p>Is Dangerous: {object?.characteristics?.isDangerous}</p>
-          </li>
-          <li>
-            <p>Enclosure: {object?.characteristics?.enclosure}</p>
-          </li>
+        <ul className="list-unstyled text-white">
+          <li>Color: {object?.characteristics?.color}</li>
+          <li>Weight: {object?.characteristics?.weight}</li>
+          <li>Is Dangerous: {object?.characteristics?.isDangerous}</li>
+          <li>Enclosure: {object?.characteristics?.enclosure}</li>
           <li>
             <p className="p-0 m-0 text-center">Foods:</p>
             <ul className="list-unstyled d-flex flex-wrap justify-content-around">
@@ -58,19 +44,17 @@ const Cards = ({ data, handleDelete, onEdit }) => {
   )
 
   const renderCard = (object) => (
-    <Card>
+    <Card className="bg-black">
       <Card.Body>
         <Card.Title className="text-center">
-          <h2>{object?.type || object?.fullName}</h2>
+          <h2>{object?.type}</h2>
         </Card.Title>
         <Card.Subtitle className="d-flex justify-content-between">
-          <span>
-            {object?.name ? 'Name: ' + object.name : 'Email:' + object?.email}
-          </span>
+          <span>{object?.name ?? 'Name: ' + object.name}</span>
           <p>Age: {object?.age}</p>
         </Card.Subtitle>
         <Card.Text>
-          <p>{object?.gender ? 'Gender: ' + object.gender : ''}</p>
+          <p>{object?.gender && 'Gender:' + object.gender}</p>
           <p>Location: {object?.location}</p>
         </Card.Text>
         {object?.characteristics ? (
@@ -98,24 +82,6 @@ const Cards = ({ data, handleDelete, onEdit }) => {
           </CardText>
         )}
       </Card.Body>
-
-      {(accessToken?.role === 'owner' || accessToken?.role === 'zookeeper') &&
-        location.pathname === '/animals' && (
-          <Card.Footer className="d-flex justify-content-between align-content-center">
-            <Button
-              bg="dark"
-              variant="secondary"
-              onClick={() => onEdit(object)}
-            >
-              Edit
-            </Button>
-            {accessToken?.role === 'owner' && (
-              <Button variant="danger" onClick={() => handleDelete(object.id)}>
-                Delete
-              </Button>
-            )}
-          </Card.Footer>
-        )}
     </Card>
   )
 

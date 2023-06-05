@@ -15,6 +15,7 @@ function Register({ onToggleForm, onRegistrationSuccess }) {
     password: '',
     confirmPassword: '',
   })
+  const [error, setError] = useState(null)
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -51,11 +52,10 @@ function Register({ onToggleForm, onRegistrationSuccess }) {
       onRegistrationSuccess()
       console.log(response)
     } catch (error) {
-      console.log(
-        error.response.data.message,
-        error.response.data.error,
-        error.response.data.statusCode
-      )
+      setError({
+        statusCode: error.response.data.statusCode,
+        message: error.response.data.message,
+      })
     }
   }
 
@@ -71,8 +71,19 @@ function Register({ onToggleForm, onRegistrationSuccess }) {
     <Container className="m-0 vh-100 ">
       <Row className="justify-content-center align-items-center h-100 m-0">
         <Col xs={12} sm={10} md={8} lg={6} xl={5}>
-          <div className="bg-white shadow p-4 rounded">
+          <div className="bg-black card-shadow p-4 rounded">
             <h1 className="text-center mb-4">Create an account</h1>
+            {error && (
+              <>
+                {' '}
+                <h3>{error.statusCode}</h3>
+                <ul>
+                  {error.message.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </>
+            )}
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-2">
                 <Form.Label>Full Name</Form.Label>

@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Animal } from "./animal.entity";
-import { Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import {
   AnimalCreateDto,
   AnimalResponseDto,
@@ -26,7 +26,9 @@ export class AnimalsService {
   }
 
   async getAnimals(query?: AnimalQueryDto): Promise<AnimalResponseDto[]> {
-    const animals = await this.animalRepository.find({});
+    const animals = await this.animalRepository.find({
+      relations: ["zookeeper"],
+    });
 
     if (animals.length === 0)
       throw new NotFoundException("No animals found in our database");
@@ -45,7 +47,7 @@ export class AnimalsService {
 
     if (query && query.type) {
       const animalsByType = await this.animalRepository.find({
-        where: { type: query.type },
+        where: { type: ILike(`%${query.type}%`) },
       });
       if (animalsByType.length === 0)
         throw new NotFoundException(
