@@ -8,6 +8,7 @@ import { PassportModule } from "@nestjs/passport";
 import { JwtStrategy } from "./strategy/jwt.strategy";
 import { RefreshTokenStrategy } from "./strategy/refreshToken.strategy";
 import { ZookeepersModule } from "src/zookeepers/zookeepers.module";
+import { AC_TOKEN } from "./auth.const";
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { ZookeepersModule } from "src/zookeepers/zookeepers.module";
     ConfigModule.forRoot(),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>("AC_TOKEN"),
+      useFactory: async () => ({
+        secret: AC_TOKEN,
         signOptions: {
           expiresIn: "7d",
         },

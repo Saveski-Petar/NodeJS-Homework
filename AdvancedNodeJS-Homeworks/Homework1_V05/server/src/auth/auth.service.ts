@@ -6,7 +6,6 @@ import { LoginDto, LoginResponseDto } from "./dto/login.dto";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { ZookeepersService } from "src/zookeepers/zookeepers.service";
-import { NotFoundError } from "rxjs";
 
 @Injectable()
 export class AuthService {

@@ -1,62 +1,62 @@
-import React, { useEffect, useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Modal from 'react-bootstrap/Modal'
-import { Row, Col } from 'react-bootstrap'
-import axiosInstance from '../../api/axios'
+import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { Row, Col } from "react-bootstrap";
+import axiosInstance from "../../api/axios";
 
 const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
-  const [name, setName] = useState('')
-  const [type, setType] = useState('')
-  const [age, setAge] = useState('')
-  const [location, setLocation] = useState('')
-  const [gender, setGender] = useState('')
-  const [food, setFood] = useState('')
-  const [color, setColor] = useState('')
-  const [isDangerous, setIsDangerous] = useState(false)
-  const [weight, setWeight] = useState('')
-  const [enclosure, setEnclosure] = useState('')
-  const [error, setError] = useState(null)
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [age, setAge] = useState("");
+  const [location, setLocation] = useState("");
+  const [gender, setGender] = useState("");
+  const [food, setFood] = useState("");
+  const [color, setColor] = useState("");
+  const [isDangerous, setIsDangerous] = useState(false);
+  const [weight, setWeight] = useState("");
+  const [enclosure, setEnclosure] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (selectedAnimal) {
-      setError(null)
-      setName(selectedAnimal.name)
-      setType(selectedAnimal.type)
-      setAge(selectedAnimal.age)
-      setLocation(selectedAnimal.location)
-      setGender(selectedAnimal.gender)
+      setError(null);
+      setName(selectedAnimal.name);
+      setType(selectedAnimal.type);
+      setAge(selectedAnimal.age);
+      setLocation(selectedAnimal.location);
+      setGender(selectedAnimal.gender);
       const { food, color, isDangerous, weight, enclosure } =
-        selectedAnimal.characteristics
-      setFood(food.join(', '))
-      setColor(color)
-      setIsDangerous(isDangerous)
-      setWeight(weight)
-      setEnclosure(enclosure)
+        selectedAnimal.characteristics;
+      setFood(food.join(", "));
+      setColor(color);
+      setIsDangerous(isDangerous);
+      setWeight(weight);
+      setEnclosure(enclosure);
     }
-  }, [selectedAnimal])
+  }, [selectedAnimal]);
 
   useEffect(() => {
     if (!show) {
-      resetForm(selectedAnimal)
+      resetForm(selectedAnimal);
     }
-  }, [show])
+  }, [show, selectedAnimal]);
 
   const resetForm = (selectedAnimal) => {
-    setError(null)
-    setName(selectedAnimal?.name)
-    setType(selectedAnimal?.type)
-    setAge(selectedAnimal?.age)
-    setLocation(selectedAnimal?.location)
-    setGender(selectedAnimal?.gender)
+    setError(null);
+    setName(selectedAnimal?.name);
+    setType(selectedAnimal?.type);
+    setAge(selectedAnimal?.age);
+    setLocation(selectedAnimal?.location);
+    setGender(selectedAnimal?.gender);
     const { food, color, isDangerous, weight, enclosure } =
-      selectedAnimal?.characteristics || {}
-    setFood(food?.join(', '))
-    setColor(color)
-    setIsDangerous(isDangerous || false)
-    setWeight(weight)
-    setEnclosure(enclosure)
-  }
+      selectedAnimal?.characteristics || {};
+    setFood(food?.join(", "));
+    setColor(color);
+    setIsDangerous(isDangerous || false);
+    setWeight(weight);
+    setEnclosure(enclosure);
+  };
 
   const handleSaveChanges = async (fetchAnimals) => {
     try {
@@ -67,27 +67,27 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
         location,
         gender,
         characteristics: {
-          food: food.split(',').map((f) => f.trim()),
+          food: food.split(",").map((f) => f.trim()),
           color,
           isDangerous,
           weight,
           enclosure,
         },
-      }
+      };
       await axiosInstance.put(
         `/api/animals/${selectedAnimal.id}`,
         updatedAnimal
-      )
-      fetchAnimals()
+      );
+      fetchAnimals();
 
-      handleClose()
+      handleClose();
     } catch (error) {
       setError({
         statusCode: error.response.data.statusCode,
         message: error.response.data.message,
-      })
+      });
     }
-  }
+  };
 
   return (
     <>
@@ -97,7 +97,7 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
         </Modal.Header>
         {error && (
           <>
-            {' '}
+            {" "}
             <h3>{error.statusCode}</h3>
             <ul>
               {error.message.map((error, index) => (
@@ -205,7 +205,7 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
 
             <Row>
               <Col className="d-sm-flex justify-content-between">
-                {' '}
+                {" "}
                 <Form.Group controlId="color">
                   <Form.Label>Colour</Form.Label>
                   <Form.Control
@@ -253,7 +253,7 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
         </Modal.Footer>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default EditAnimal
+export default EditAnimal;
