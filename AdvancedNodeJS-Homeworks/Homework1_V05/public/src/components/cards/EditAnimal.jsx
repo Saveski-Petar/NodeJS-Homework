@@ -92,11 +92,11 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
   return (
     <>
       <Modal fullscreen="sm-down" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="customDark">
           <Modal.Title>Edit Animal</Modal.Title>
         </Modal.Header>
         {error && (
-          <>
+          <div className="customDark">
             {" "}
             <h3>{error.statusCode}</h3>
             <ul>
@@ -104,9 +104,9 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
                 <li key={index}>{error}</li>
               ))}
             </ul>
-          </>
+          </div>
         )}
-        <Modal.Body>
+        <Modal.Body className="customDark">
           <Form>
             <Row>
               <Col className="d-sm-flex justify-content-between">
@@ -240,7 +240,7 @@ const EditAnimal = ({ selectedAnimal, show, handleClose, fetchAnimals }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-between">
+        <Modal.Footer className="d-flex justify-content-between customDark">
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>

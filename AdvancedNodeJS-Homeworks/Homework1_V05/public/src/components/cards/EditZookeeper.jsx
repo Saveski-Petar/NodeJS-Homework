@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Modal from 'react-bootstrap/Modal'
-import { Row, Col } from 'react-bootstrap'
-import axiosInstance from '../../api/axios'
+import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { Row, Col } from "react-bootstrap";
+import axiosInstance from "../../api/axios";
 
 const EditZookeeper = ({
   selectedZookeeper,
@@ -11,38 +11,38 @@ const EditZookeeper = ({
   handleClose,
   fetchZookeepers,
 }) => {
-  const [fullName, setfullName] = useState('')
-  const [age, setAge] = useState('')
-  const [location, setLocation] = useState('')
-  const [isActive, setIsActive] = useState('')
-  const [role, setRole] = useState('')
-  const [email, setEmail] = useState('')
-  const [error, setError] = useState(null)
+  const [fullName, setfullName] = useState("");
+  const [age, setAge] = useState("");
+  const [location, setLocation] = useState("");
+  const [isActive, setIsActive] = useState("");
+  const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setfullName(selectedZookeeper?.fullName || '')
-    setAge(selectedZookeeper?.age || '')
-    setLocation(selectedZookeeper?.location || '')
-    setIsActive(selectedZookeeper?.isActive || '')
-    setRole(selectedZookeeper?.role || '')
-    setEmail(selectedZookeeper?.email || '')
-  }, [selectedZookeeper])
+    setfullName(selectedZookeeper?.fullName || "");
+    setAge(selectedZookeeper?.age || "");
+    setLocation(selectedZookeeper?.location || "");
+    setIsActive(selectedZookeeper?.isActive || "");
+    setRole(selectedZookeeper?.role || "");
+    setEmail(selectedZookeeper?.email || "");
+  }, [selectedZookeeper]);
 
   useEffect(() => {
     if (!show) {
-      resetForm(selectedZookeeper)
+      resetForm(selectedZookeeper);
     }
-  }, [show, selectedZookeeper])
+  }, [show, selectedZookeeper]);
 
   const resetForm = (selectedZookeeper) => {
-    setError(null)
-    setfullName(selectedZookeeper?.fullName)
-    setAge(selectedZookeeper?.age)
-    setEmail(selectedZookeeper?.email)
-    setLocation(selectedZookeeper?.location)
-    setIsActive(selectedZookeeper?.isActive)
-    setRole(selectedZookeeper?.role)
-  }
+    setError(null);
+    setfullName(selectedZookeeper?.fullName);
+    setAge(selectedZookeeper?.age);
+    setEmail(selectedZookeeper?.email);
+    setLocation(selectedZookeeper?.location);
+    setIsActive(selectedZookeeper?.isActive);
+    setRole(selectedZookeeper?.role);
+  };
 
   const handleSaveChanges = async () => {
     try {
@@ -53,46 +53,46 @@ const EditZookeeper = ({
         isActive,
         role,
         email,
-      }
+      };
       await axiosInstance.put(
         `/api/zookeepers/${selectedZookeeper.id}`,
         updatedZookeeper
-      )
-      handleClose()
-      fetchZookeepers()
-      console.log('updated')
+      );
+      handleClose();
+      fetchZookeepers();
+      console.log("updated");
     } catch (error) {
       if (error.response) {
         setError({
           statusCode: error.response.data?.statusCode,
           message: error.response.data?.message,
-        })
+        });
       } else {
         setError({
           statusCode: null,
-          message: 'An error occurred. Please try again.',
-        })
+          message: "An error occurred. Please try again.",
+        });
       }
     }
-  }
+  };
 
   return (
     <>
       <Modal fullscreen="sm-down" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="customDark">
           <Modal.Title>Edit Zookeeper</Modal.Title>
         </Modal.Header>
         {error && (
-          <>
+          <div className="customDark">
             <h3>{error?.statusCode}</h3>
             <ul>
               {error?.message?.map((error, index) => (
                 <li key={index}>{error}</li>
               ))}
             </ul>
-          </>
+          </div>
         )}
-        <Modal.Body>
+        <Modal.Body className="customDark">
           <Form>
             <Row>
               <Col className="d-sm-flex justify-content-between">
@@ -183,7 +183,7 @@ const EditZookeeper = ({
             </Row>
           </Form>
         </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-between">
+        <Modal.Footer className="d-flex justify-content-between customDark">
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
@@ -193,7 +193,7 @@ const EditZookeeper = ({
         </Modal.Footer>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default EditZookeeper
+export default EditZookeeper;

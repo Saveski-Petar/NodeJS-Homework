@@ -4,6 +4,11 @@ body {
   color: rgba(221, 221, 221, 0.808);
 }
 
+.customDark {
+  background-color: #212529;
+  color: rgba(221, 221, 221, 0.808);
+}
+
 .fit-Placeholder::placeholder {
   font-size: 0.8rem;
 }

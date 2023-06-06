@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import axiosInstance from '../../api/axios'
+import React, { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import axiosInstance from "../../api/axios";
 
 const AssignZookeeper = ({
   handleClose,
@@ -11,10 +11,10 @@ const AssignZookeeper = ({
   selectedAnimal,
   updateAnimals,
 }) => {
-  const [animalId, setAnimalId] = useState('')
-  const [zookeeperId, setZookeeperId] = useState('')
-  const [zookeepers, setZookeepers] = useState(null)
-  const [error, setError] = useState(null)
+  const [animalId, setAnimalId] = useState("");
+  const [zookeeperId, setZookeeperId] = useState("");
+  const [zookeepers, setZookeepers] = useState(null);
+  const [error, setError] = useState(null);
 
   const zookeperList = (data) => (
     <ul className="list-unstyled">
@@ -28,54 +28,55 @@ const AssignZookeeper = ({
         </>
       ))}
     </ul>
-  )
+  );
   useEffect(() => {
     if (show) {
-      setZookeeperId('')
-      setError(null)
-      setZookeepers(null)
+      setZookeeperId("");
+      setError(null);
+      setZookeepers(null);
     }
-  }, [show])
+  }, [show]);
 
   const fetchZookeeprs = async () => {
     try {
-      const response = await axiosInstance.get('/api/zookeepers')
-
-      setZookeepers(response.data)
+      const response = await axiosInstance.get("/api/zookeepers");
+      console.log(response);
+      setZookeepers(response.data);
     } catch (error) {
+      console.log(error);
       setError({
         statusCode: error.response.data.statusCode,
         message: error.response.data.message,
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
     if (selectedAnimal && selectedAnimal.id) {
-      setAnimalId(selectedAnimal.id)
+      setAnimalId(selectedAnimal.id);
     }
-  }, [selectedAnimal])
+  }, [selectedAnimal]);
 
   const handleAssignZookeeper = async () => {
     try {
       await axiosInstance.patch(
         `/api/animals/${animalId}/zookeeper/${zookeeperId}`
-      )
-      handleClose(true)
-      updateAnimals()
-      setZookeeperId('')
+      );
+      handleClose(true);
+      updateAnimals();
+      setZookeeperId("");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <>
       <Modal fullscreen="sm-down" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="customDark">
           <Modal.Title>Assign Zookeeper</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="customDark">
           <Form>
             <Row>
               <Col className="d-sm-flex justify-content-between">
@@ -115,14 +116,14 @@ const AssignZookeeper = ({
             </Row>
             <Row>
               <Col>
-                {' '}
+                {" "}
                 {error || zookeepers ? (
                   <div
                     className="card-shadow "
                     style={{
-                      height: '200px',
-                      width: '100%',
-                      overflow: 'auto',
+                      height: "200px",
+                      width: "100%",
+                      overflow: "auto",
                     }}
                   >
                     {error ? (
@@ -139,7 +140,7 @@ const AssignZookeeper = ({
             </Row>
           </Form>
         </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-between">
+        <Modal.Footer className="d-flex justify-content-between customDark">
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
@@ -149,7 +150,7 @@ const AssignZookeeper = ({
         </Modal.Footer>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default AssignZookeeper
+export default AssignZookeeper;

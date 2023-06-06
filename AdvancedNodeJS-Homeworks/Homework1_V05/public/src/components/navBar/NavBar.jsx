@@ -1,27 +1,27 @@
-import React, { useContext } from 'react'
-import Container from 'react-bootstrap/Container'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
-import Dropdown from 'react-bootstrap/Dropdown'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext'
+import React, { useContext } from "react";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 const NavBar = ({ onAdd }) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const { accessToken } = useContext(AuthContext)
+  const { accessToken } = useContext(AuthContext);
 
   const handleLogOut = () => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
 
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
   return (
     <>
-      <Navbar bg="dark" expand="lg" variant="dark">
+      <Navbar bg="dark" expand="lg" variant="dark" className="border-bottom">
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
             Zoo.Dev
@@ -35,45 +35,45 @@ const NavBar = ({ onAdd }) => {
               <Nav.Link as={Link} to="/About">
                 About
               </Nav.Link>
-              {accessToken?.role === 'owner' && (
+              {accessToken?.role === "owner" && (
                 <Nav.Link as={Link} to="/users">
                   Users
                 </Nav.Link>
               )}
-              {accessToken?.role === 'owner' && (
+              {accessToken?.role === "owner" && (
                 <Nav.Link as={Link} to="/Zookeepers">
                   Zookeepers
                 </Nav.Link>
               )}
-              {(accessToken?.role === 'owner' ||
-                accessToken?.role === 'zookeeper') && (
+              {(accessToken?.role === "owner" ||
+                accessToken?.role === "zookeeper") && (
                 <Nav.Link as={Link} to="/animals">
                   Animals
                 </Nav.Link>
               )}
             </Nav>
             <div className="d-flex justify-content-end ">
-              {' '}
+              {" "}
               <Dropdown>
                 <Dropdown.Toggle
                   variant="dark"
                   id="dropdown-basic"
                   style={{
-                    border: 'none',
-                    boxShadow: 'none',
-                    backgroundColor: 'transparent',
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "transparent",
                   }}
                 >
-                  Signed in as:{' '}
-                  <span style={{ color: 'aqua' }}>{accessToken?.fullName}</span>
+                  Signed in as:{" "}
+                  <span style={{ color: "aqua" }}>{accessToken?.fullName}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  {accessToken?.role === 'owner' &&
-                    location.pathname === '/animals' && (
+                  {accessToken?.role === "owner" &&
+                    location.pathname === "/animals" && (
                       <>
                         <Dropdown.Item
                           onClick={() => {
-                            onAdd()
+                            onAdd();
                           }}
                         >
                           Add New Animal
@@ -90,7 +90,7 @@ const NavBar = ({ onAdd }) => {
         </Container>
       </Navbar>
     </>
-  )
-}
+  );
+};
 
-export default NavBar
+export default NavBar;

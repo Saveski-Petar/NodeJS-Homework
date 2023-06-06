@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
-import Modal from 'react-bootstrap/Modal'
-import axiosInstance from '../../api/axios'
+import React, { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import axiosInstance from "../../api/axios";
 
 const AddNewAnimalCard = ({ handleClose, show, updateAnimals }) => {
-  const [name, setName] = useState('')
-  const [type, setType] = useState('')
-  const [age, setAge] = useState('')
-  const [location, setLocation] = useState('')
-  const [gender, setGender] = useState('')
-  const [food, setFood] = useState([])
-  const [color, setColor] = useState('')
-  const [isDangerous, setIsDangerous] = useState(false)
-  const [weight, setWeight] = useState('')
-  const [enclosure, setEnclosure] = useState('')
-  const [error, setError] = useState(null)
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [age, setAge] = useState("");
+  const [location, setLocation] = useState("");
+  const [gender, setGender] = useState("");
+  const [food, setFood] = useState([]);
+  const [color, setColor] = useState("");
+  const [isDangerous, setIsDangerous] = useState(false);
+  const [weight, setWeight] = useState("");
+  const [enclosure, setEnclosure] = useState("");
+  const [error, setError] = useState(null);
 
   const animalData = {
     name,
@@ -27,64 +27,64 @@ const AddNewAnimalCard = ({ handleClose, show, updateAnimals }) => {
     characteristics: {
       food: [],
       color,
-      isDangerous: isDangerous ? 'Dangerous' : 'Harmless',
+      isDangerous: isDangerous ? "Dangerous" : "Harmless",
       weight: parseInt(weight),
       enclosure,
     },
-  }
+  };
 
   useEffect(() => {
     if (!show) {
-      resetForm()
+      resetForm();
     }
-  }, [show])
+  }, [show]);
   const resetForm = () => {
-    setName('')
-    setType('')
-    setAge('')
-    setLocation('')
-    setGender('')
-    setFood('')
-    setColor('')
-    setIsDangerous(false)
-    setWeight('')
-    setEnclosure('')
-    setError(null)
-  }
+    setName("");
+    setType("");
+    setAge("");
+    setLocation("");
+    setGender("");
+    setFood("");
+    setColor("");
+    setIsDangerous(false);
+    setWeight("");
+    setEnclosure("");
+    setError(null);
+  };
 
   const handleAddAnimal = async () => {
     try {
-      await axiosInstance.post('/api/animals', animalData)
-      console.log('animal Added')
-      updateAnimals()
-      handleClose()
+      await axiosInstance.post("/api/animals", animalData);
+      console.log("animal Added");
+      updateAnimals();
+      handleClose();
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setError({
         statusCode: error.response.data.statusCode,
         message: error.response.data.message,
-      })
+      });
     }
-  }
+  };
 
   return (
     <>
       <Modal fullscreen="sm-down" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="customDark">
           <Modal.Title>Add Animal</Modal.Title>
         </Modal.Header>
         {error && (
-          <>
-            {' '}
+          <div className="customDark">
+            {" "}
             <h3>{error.statusCode}</h3>
             <ul>
               {error.message.map((error, index) => (
                 <li key={index}>{error}</li>
               ))}
             </ul>
-          </>
+          </div>
         )}
-        <Modal.Body>
+        <Modal.Body className="customDark">
           <Form>
             <Row>
               <Col className="d-sm-flex justify-content-between">
@@ -183,7 +183,7 @@ const AddNewAnimalCard = ({ handleClose, show, updateAnimals }) => {
 
             <Row>
               <Col className="d-sm-flex justify-content-between">
-                {' '}
+                {" "}
                 <Form.Group controlId="color">
                   <Form.Label>Colour</Form.Label>
                   <Form.Control
@@ -218,7 +218,7 @@ const AddNewAnimalCard = ({ handleClose, show, updateAnimals }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-between">
+        <Modal.Footer className="d-flex justify-content-between customDark">
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
@@ -228,7 +228,7 @@ const AddNewAnimalCard = ({ handleClose, show, updateAnimals }) => {
         </Modal.Footer>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default AddNewAnimalCard
+export default AddNewAnimalCard;

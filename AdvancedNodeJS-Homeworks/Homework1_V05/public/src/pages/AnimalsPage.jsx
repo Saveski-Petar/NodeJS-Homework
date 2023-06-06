@@ -1,89 +1,89 @@
-import React, { useEffect, useState } from 'react'
-import NavBar from '../components/navBar/NavBar'
-import axiosInstance from '../api/axios'
-import SearchBar from '../components/searchBar/SearchBar'
-import EditAnimal from '../components/cards/EditAnimal'
-import AddNewAnimalCard from '../components/cards/AddNewAnimalCard'
-import AssignZookeeper from '../components/cards/AssignZookeeper'
-import AnimalList from '../components/lists/AnimalList'
-import SuccessMsg from '../components/SuccessMsg'
-import { Container } from 'react-bootstrap'
+import React, { useEffect, useState } from "react";
+import NavBar from "../components/navBar/NavBar";
+import axiosInstance from "../api/axios";
+import SearchBar from "../components/searchBar/SearchBar";
+import EditAnimal from "../components/cards/EditAnimal";
+import AddNewAnimalCard from "../components/cards/AddNewAnimalCard";
+import AssignZookeeper from "../components/cards/AssignZookeeper";
+import AnimalList from "../components/lists/AnimalList";
+import SuccessMsg from "../components/SuccessMsg";
+import { Container } from "react-bootstrap";
 
 const AnimalsPage = () => {
-  const [data, setData] = useState([])
-  const [searchedData, setSearchData] = useState(null)
-  const [selectedAnimal, setSelectedAnimal] = useState(null)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showAddNewAnimal, setShowAddNewAnimal] = useState(false)
-  const [openAssignZookeeper, setOpenAssignZookeeper] = useState(false)
-  const [addNewAnimalMsg, setAddNewAnimalMsg] = useState(false)
-  const [error, setError] = useState(null)
+  const [data, setData] = useState([]);
+  const [searchedData, setSearchData] = useState(null);
+  const [selectedAnimal, setSelectedAnimal] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddNewAnimal, setShowAddNewAnimal] = useState(false);
+  const [openAssignZookeeper, setOpenAssignZookeeper] = useState(false);
+  const [addNewAnimalMsg, setAddNewAnimalMsg] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchAnimals()
-  }, [])
+    fetchAnimals();
+  }, []);
 
   const fetchAnimals = async () => {
     try {
-      const response = await axiosInstance.get('/api/animals')
-      console.log('FetchUsed')
-      setData(response.data)
+      const response = await axiosInstance.get("/api/animals");
+      console.log("FetchUsed");
+      setData(response.data);
     } catch (error) {
       if (error.response) {
         setError({
           statusCode: error.response.data?.statusCode,
           message: error.response.data?.message,
-        })
+        });
       } else {
         setError({
           statusCode: null,
-          message: 'An error occurred. Please try again.',
-        })
+          message: "An error occurred. Please try again.",
+        });
       }
     }
-  }
+  };
   useEffect(() => {
-    setSearchData(null)
-  }, [data])
+    setSearchData(null);
+  }, [data]);
 
   const searchData = (searchData) => {
-    setSearchData(searchData)
-  }
+    setSearchData(searchData);
+  };
 
   const handleCloseEditModal = () => {
-    setShowEditModal(false)
-  }
+    setShowEditModal(false);
+  };
 
   const handleEditAnimal = (animal) => {
-    setSelectedAnimal(animal)
-    setShowEditModal(true)
-  }
+    setSelectedAnimal(animal);
+    setShowEditModal(true);
+  };
 
   const handleCloseNewAnimalModal = () => {
-    setShowAddNewAnimal(false)
-    setAddNewAnimalMsg(true)
-  }
+    setShowAddNewAnimal(false);
+    setAddNewAnimalMsg(true);
+  };
   const handleOpenNewAnimalModal = () => {
-    setShowAddNewAnimal(true)
-  }
+    setShowAddNewAnimal(true);
+  };
   const handleOpenAssignZookeeper = (animal) => {
-    setSelectedAnimal(animal)
-    setOpenAssignZookeeper(true)
-  }
+    setSelectedAnimal(animal);
+    setOpenAssignZookeeper(true);
+  };
   const handleCloseAssignZookeeper = () => {
-    setOpenAssignZookeeper(false)
-  }
+    setOpenAssignZookeeper(false);
+  };
 
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/api/animals/${id}`)
-      console.log('Deleted')
+      await axiosInstance.delete(`/api/animals/${id}`);
+      console.log("Deleted");
 
-      setData((prevData) => prevData.filter((animal) => animal.id !== id))
+      setData((prevData) => prevData.filter((animal) => animal.id !== id));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -121,7 +121,7 @@ const AnimalsPage = () => {
       />
 
       {error ? (
-        <Container className="text-center">
+        <Container className="text-center customDark">
           <h1>{error.statusCode}</h1>
           <p>{error.message}</p>
         </Container>
@@ -135,7 +135,7 @@ const AnimalsPage = () => {
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default AnimalsPage
+export default AnimalsPage;
